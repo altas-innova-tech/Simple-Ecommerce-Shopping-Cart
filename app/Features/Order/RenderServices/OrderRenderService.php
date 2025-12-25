@@ -2,6 +2,8 @@
 
 namespace App\Features\Order\RenderServices;
 
+use App\Core\Base\Builders\Filter\FilterBuilder;
+use App\Core\Base\Builders\Filter\FilterItem;
 use App\Core\Base\Builders\Table\ColumnBuilder;
 use App\Core\Base\Builders\Table\ColumnItem;
 use App\Core\Base\Builders\Table\TableBuilder;
@@ -10,9 +12,27 @@ use App\Core\Constants\ComponentConstants;
 use App\Core\Constants\Constants;
 use App\Core\Interfaces\Features\RenderServiceInterface;
 use App\Features\Order\Models\Order;
+use App\Features\Order\Services\OrderService;
 
 class OrderRenderService extends BaseRenderService implements RenderServiceInterface {
     use OrderConstantsTrait;
+
+    public static function get_filter_builder() : FilterBuilder {
+        $filter_builder = FilterBuilder
+            ::new()
+            ->add_filter(
+                FilterItem
+                    ::new()
+                    ->label("Status")
+                    ->name("status")
+                    ->values(OrderService::get_status_render())
+            );
+
+
+        return $filter_builder;
+    }
+
+
 
     public static function get_columns() : ColumnBuilder {
         $columns_builder = ColumnBuilder
@@ -38,6 +58,12 @@ class OrderRenderService extends BaseRenderService implements RenderServiceInter
                     ->name("total_render")
                     ->label("Total")
                     ->component(ComponentConstants::component_number)
+            )->add_column(
+                ColumnItem
+                    ::new()
+                    ->name("status")
+                    ->label("status_render")
+                    ->component(ComponentConstants::component_badge)
             );
 
         return $columns_builder;
@@ -52,6 +78,7 @@ class OrderRenderService extends BaseRenderService implements RenderServiceInter
 
 
         $table_builder = TableBuilder::query($query)
+                                     ->add_filters(self::get_filter_builder())
                                      ->add_columns(self::get_columns());
 
         $table_builder

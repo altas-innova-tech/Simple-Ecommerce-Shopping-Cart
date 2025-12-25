@@ -8,6 +8,7 @@ use App\Core\Constants\Constants;
 use App\Core\Constants\FeaturesConstants;
 use App\Features\Order\Observers\OrderObserver;
 use App\Features\Order\RenderServices\OrderConstantsTrait;
+use App\Features\Order\Services\OrderService;
 use App\Features\OrderProduct\Models\OrderProduct;
 use App\Models\User;
 use Database\Factories\OrderFactory;
@@ -54,6 +55,18 @@ class Order extends BaseModel {
     }
 
 
+
+    protected function scopeCart(Builder $query) : void {
+        $query->where('status', OrderService::status_cart);
+    }
+
+
+
+    protected function scopeCompleted(Builder $query) : void {
+        $query->where('status', OrderService::status_completed);
+    }
+
+
     //==================================================================================================================
     // Attributes
     //==================================================================================================================
@@ -68,9 +81,16 @@ class Order extends BaseModel {
 
     public function getProductCountRenderAttribute() : array {
         return [
-            Constants::label => 1,
+            Constants::label => $this->products()
+                                     ->count(),
             Constants::color => ColorConstants::green,
         ];
+    }
+
+
+
+    public function getStatusRenderAttribute() : array {
+        return OrderService::status_render[$this->status];
     }
 
 

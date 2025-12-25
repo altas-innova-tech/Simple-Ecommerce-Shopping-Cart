@@ -3,6 +3,7 @@
 namespace App\Core\Base\Builders\Table;
 
 
+use App\Core\Base\Builders\Filter\FilterBuilder;
 use App\Core\Base\Model\BaseModel;
 use App\Core\Constants\Constants;
 use Closure;
@@ -22,6 +23,7 @@ class TableBuilder {
     protected string|null $search_text;
     protected string      $order_by        = self::default_order_by;
     protected string      $order_direction = self::default_order_direction;
+    protected array       $filters;
 
     const int     default_page            = 1;
     const int     default_per_page        = 10;
@@ -71,6 +73,17 @@ class TableBuilder {
         return $this;
     }
 
+    public function add_filters(FilterBuilder $filters) : self {
+        $mapped_filters = $filters
+            ->get()
+            ->map(fn($filter) => $filter->get())
+            ->toArray();
+
+
+        $this->filters = $mapped_filters;
+
+        return $this;
+    }
 
 
     public function get_columns() : array {
@@ -95,6 +108,21 @@ class TableBuilder {
         return $this;
     }
 
+    private function apply_filters() : void {
+        $query   = $this->query;
+        $filters = $this->filters;
+
+        foreach ($filters as $filter) {
+            $filter_value = request($filter['name']);
+
+            if ($filter_value) {
+                $filter_value  = str_replace(['[', ']'], "", $filter_value);
+                $filter_values = explode(", ", $filter_value);
+
+                $query->whereIn($filter['name'], $filter_values);
+            }
+        }
+    }
 
 
     private function apply_search_filter(?string $search_text) : void {
@@ -126,12 +154,16 @@ class TableBuilder {
         }
 
 
+        // Apply filters
+        $this->apply_filters();
+
         // Paginate the query
         $paginated_query = $this->query->paginate($this->per_page, ["*"], "page", $this->page);
 
         $headers = $this->columns;
 
         return [
+            "filters"         => $this->filters,
             "order_by"        => $this->order_by,
             "order_direction" => $this->order_direction,
             "headers"         => $headers,

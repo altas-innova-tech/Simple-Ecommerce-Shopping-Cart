@@ -4,7 +4,13 @@
     </div>
 
     <template v-else>
-        <div class="justify-self-start"></div>
+        <div class="justify-self-start">
+            <DataTableFilter
+                :filter_options="filters"
+                :model_value="filtrations"
+                @update:model_value="handle_filters_changed"
+            />
+        </div>
 
         <div class="flex items-center justify-between">
             <Input
@@ -206,6 +212,7 @@ import { route } from 'ziggy-js';
 import { Input } from '@/components/ui/input';
 import { DataTableHelpers } from './data-table-helpers';
 import RenderComponents from '@/custom-components/fields/render-components.vue';
+import DataTableFilter from '@/custom-components/data-table/data-table-filter.vue';
 
 const props = defineProps<FeaturesListInterface>();
 const headers = computed<PaginationHeadersInterface[]>(
@@ -288,6 +295,49 @@ const handle_select_all = (checked: boolean) => {
     } else {
         selected_items.value.splice(0, selected_items.value.length);
     }
+};
+
+// Filtration
+const filters = computed<ActionsInterface[]>(() => props.table_builder.filters);
+const filtrations = ref<Record<string, (string | number)[]>>({});
+
+const handle_filters_changed = (
+    newFilters: Record<string, (string | number)[]>,
+    filter_name: string,
+) => {
+    filtrations.value = newFilters;
+
+    const queryParams = new URLSearchParams();
+
+    // Add filters that exist and have values
+    Object.entries(newFilters).forEach(([key, value]) => {
+        if (Array.isArray(value) && value.length > 0) {
+            const arrayString = `[${value.join(', ')}]`;
+            queryParams.append(key, arrayString);
+        } else if (!Array.isArray(value)) {
+            queryParams.append(key, String(value));
+        }
+    });
+
+    // Get current route params and remove old filter parameters
+    const currentParams = { ...route().params };
+
+    // Remove any existing filter parameters that are not in newFilters
+    Object.keys(currentParams).forEach((key) => {
+        if (!(key in newFilters)) {
+            delete currentParams[key];
+        }
+    });
+
+    // Merge cleaned params with new query params
+    const params = {
+        ...currentParams,
+        ...Object.fromEntries(queryParams),
+    };
+
+    router.visit(route(route().current(), params), {
+        preserveState: true,
+    });
 };
 
 watch(selected_per_page, () => {
