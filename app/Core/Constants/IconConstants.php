@@ -35,12 +35,13 @@ class IconConstants {
     const string              person_standing = "PersonStanding";
     const  string             play            = "Play";
     const string              graduation_cap  = "GraduationCap";
-    const  string             apple           = "apple";
+    const  string             apple           = "Apple";
     const string              ShoppingBasket  = "ShoppingBasket";
 
     //==================================================================================================================
     // Features
     //==================================================================================================================
     const string       feature_product = self::apple;
+    const string       feature_order = self::apple;
     const string       cart            = self::ShoppingBasket;
 }

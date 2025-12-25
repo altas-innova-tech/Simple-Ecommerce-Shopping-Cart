@@ -3,8 +3,8 @@
 use Illuminate\Contracts\Auth\Authenticatable;
 
 function user() : ?Authenticatable {
-        return auth()
-            ->user();
+    return auth()
+        ->user();
 }
 
 function user_id() : ?int {
@@ -24,6 +24,8 @@ function user_name() : ?string {
 }
 
 
-function is_admin(string $guard) : bool {
-    return true;
+function is_member() : bool {
+    return !user()->is_admin;
 }
+
+

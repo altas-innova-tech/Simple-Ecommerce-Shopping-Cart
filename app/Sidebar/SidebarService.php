@@ -7,12 +7,14 @@ use App\Core\Base\Builders\Navigation\NavigationItem;
 use App\Core\Constants\Constants;
 use App\Core\Constants\PermissionConstants;
 use App\Core\Services\FeaturesService;
+use App\Features\Order\Models\Order;
 use App\Features\Product\Models\Product;
 
 class SidebarService {
     public static function get_sidebar_content() : array {
         $models_permission = [
-            Product::class
+            Product::class,
+            Order::class,
         ];
 
 

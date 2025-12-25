@@ -11,8 +11,6 @@ Route::name(FeaturesConstants::product . ".")
          Route::get("/", [ProductController::class, "list"])
               ->name("list");
 
-         Route::get("/trashed", [ProductController::class, "trashed"])
-              ->name("trashed");
 
          Route::get("/create", [ProductController::class, "create"])
               ->name("create");

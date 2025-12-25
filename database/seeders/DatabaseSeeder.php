@@ -18,5 +18,8 @@ class DatabaseSeeder extends Seeder {
 
         $this->command->info("Seeding Products...");
         $this->call(ProductSeeder::class);
+
+        $this->command->info("Seeding Orders...");
+        $this->call(OrderSeeder::class);
     }
 }

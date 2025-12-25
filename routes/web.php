@@ -18,6 +18,7 @@ Route::get('dashboard', function () {
 Route::middleware(['auth', 'verified'])
      ->group(function () {
          include __DIR__ . '/Features/ProductRoutes.php';
+         include __DIR__ . '/Features/OrderRoutes.php';
       // include __DIR__ . '/Features/CartRoutes.php.php';
      });
 
