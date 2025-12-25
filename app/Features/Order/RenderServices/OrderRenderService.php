@@ -13,6 +13,7 @@ use App\Core\Constants\Constants;
 use App\Core\Interfaces\Features\RenderServiceInterface;
 use App\Features\Order\Models\Order;
 use App\Features\Order\Services\OrderService;
+use App\Models\User;
 
 class OrderRenderService extends BaseRenderService implements RenderServiceInterface {
     use OrderConstantsTrait;
@@ -27,6 +28,22 @@ class OrderRenderService extends BaseRenderService implements RenderServiceInter
                     ->name("status")
                     ->values(OrderService::get_status_render())
             );
+
+
+        if (is_admin()) {
+            $members = User::Member()
+                           ->listForSelect()
+                           ->get()
+                           ->toArray();
+
+            $filter_builder->add_filter(
+                FilterItem
+                    ::new()
+                    ->label("Member")
+                    ->name("user_id")
+                    ->values($members)
+            );
+        }
 
 
         return $filter_builder;
@@ -58,7 +75,8 @@ class OrderRenderService extends BaseRenderService implements RenderServiceInter
                     ->name("total_render")
                     ->label("Total")
                     ->component(ComponentConstants::component_number)
-            )->add_column(
+            )
+            ->add_column(
                 ColumnItem
                     ::new()
                     ->name("status")

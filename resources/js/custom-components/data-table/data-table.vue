@@ -167,20 +167,7 @@
 </template>
 
 <script setup lang="ts">
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from '@/components/ui/table';
-import {
-    ChevronDown,
-    ChevronsUpDown,
-    ChevronUp,
-    Ellipsis,
-} from 'lucide-vue-next';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -188,6 +175,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { Input } from '@/components/ui/input';
 import {
     Select,
     SelectContent,
@@ -196,8 +184,27 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import Paginator from './paginator.vue';
-import { Checkbox } from '@/components/ui/checkbox';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/components/ui/table';
+import DataTableFilter from '@/custom-components/data-table/data-table-filter.vue';
+import RenderComponents from '@/custom-components/fields/render-components.vue';
+import { router } from '@inertiajs/vue3';
+import {
+    ChevronDown,
+    ChevronsUpDown,
+    ChevronUp,
+    Ellipsis,
+} from 'lucide-vue-next';
+import { computed, ref, watch } from 'vue';
+import { route } from 'ziggy-js';
+import RenderActions from '../render-actions/render-actions.vue';
+import { DataTableHelpers } from './data-table-helpers';
 import {
     ActionsInterface,
     FeaturesListInterface,
@@ -205,14 +212,7 @@ import {
     PaginationInterface,
     PaginationItemsInterface,
 } from './index';
-import { computed, ref, watch } from 'vue';
-import RenderActions from '../render-actions/render-actions.vue';
-import { router } from '@inertiajs/vue3';
-import { route } from 'ziggy-js';
-import { Input } from '@/components/ui/input';
-import { DataTableHelpers } from './data-table-helpers';
-import RenderComponents from '@/custom-components/fields/render-components.vue';
-import DataTableFilter from '@/custom-components/data-table/data-table-filter.vue';
+import Paginator from './paginator.vue';
 
 const props = defineProps<FeaturesListInterface>();
 const headers = computed<PaginationHeadersInterface[]>(
@@ -331,6 +331,7 @@ const handle_filters_changed = (
 
     // Merge cleaned params with new query params
     const params = {
+        page: 1,
         ...currentParams,
         ...Object.fromEntries(queryParams),
     };

@@ -3,12 +3,14 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Core\Base\Model\BaseModel;
+use Faker\Provider\Base;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 
-class User extends Authenticatable {
+class User extends BaseModel {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, TwoFactorAuthenticatable;
 
@@ -35,6 +37,8 @@ class User extends Authenticatable {
         'remember_token',
     ];
 
+
+
     /**
      * Get the attributes that should be cast.
      *
@@ -46,6 +50,19 @@ class User extends Authenticatable {
             'password'                => 'hashed',
             'two_factor_confirmed_at' => 'datetime',
         ];
+    }
+
+    //==================================================================================================================
+    // Scopes
+    //==================================================================================================================
+    protected function scopeMember(Builder $query) : void {
+        $query->where('is_admin', "=", "0");
+    }
+
+
+
+    protected function scopeListForSelect(Builder $query, string $value = "id", string $label = "name") : Builder {
+       return parent::scopeListForSelect($query, $value, $label);
     }
 
 

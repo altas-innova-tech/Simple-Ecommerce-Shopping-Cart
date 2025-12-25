@@ -23,7 +23,7 @@ class TableBuilder {
     protected string|null $search_text;
     protected string      $order_by        = self::default_order_by;
     protected string      $order_direction = self::default_order_direction;
-    protected array       $filters;
+    protected array       $filters = [];
 
     const int     default_page            = 1;
     const int     default_per_page        = 10;

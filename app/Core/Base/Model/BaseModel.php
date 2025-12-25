@@ -3,7 +3,6 @@
 namespace App\Core\Base\Model;
 
 use App\Core\Traits\Models\BaseModelTrait;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;

@@ -81,8 +81,8 @@ class Order extends BaseModel {
 
     public function getProductCountRenderAttribute() : array {
         return [
-            Constants::label => $this->products()
-                                     ->count(),
+            Constants::label => (string) $this->products()
+                                              ->count(),
             Constants::color => ColorConstants::green,
         ];
     }
