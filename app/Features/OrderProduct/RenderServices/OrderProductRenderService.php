@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Features\Product\RenderServices;
+namespace App\Features\OrderProduct\RenderServices;
 
 use App\Core\Base\Builders\Table\ColumnBuilder;
 use App\Core\Base\Builders\Table\ColumnItem;
@@ -9,11 +9,10 @@ use App\Core\Base\RenderData\BaseRenderService;
 use App\Core\Constants\ComponentConstants;
 use App\Core\Constants\Constants;
 use App\Core\Interfaces\Features\RenderServiceInterface;
-use App\Features\Product\Models\Product;
-use Illuminate\Database\Eloquent\Builder;
+use App\Features\OrderProduct\Models\OrderProduct;
 
-class ProductRenderService extends BaseRenderService implements RenderServiceInterface {
-    use ProductConstantsTrait;
+class OrderProductRenderService extends BaseRenderService implements RenderServiceInterface {
+    use OrderProductConstantsTrait;
 
     public static function get_columns() : ColumnBuilder {
         $columns_builder = ColumnBuilder
@@ -47,20 +46,6 @@ class ProductRenderService extends BaseRenderService implements RenderServiceInt
                     ->triable()
             );
 
-
-        //==============================================================================================================
-        // Add column to display products status In/Out of stock
-        //==============================================================================================================
-        if (is_admin()) {
-            $columns_builder->add_column(
-                ColumnItem
-                    ::new()
-                    ->name("Statut")
-                    ->label("status_render")
-                    ->component(ComponentConstants::component_badge)
-            );
-        }
-
         return $columns_builder;
     }
 
@@ -69,15 +54,14 @@ class ProductRenderService extends BaseRenderService implements RenderServiceInt
     public static function get_table_builder(array $params = []) : TableBuilder {
         $permission = $params[Constants::key_permission];
 
-        $query = Product::query()
-                        ->when(is_member(), fn(Builder $query) => $query->inStock());
+        $query = OrderProduct::query();
 
         $table_builder = TableBuilder::query($query)
                                      ->add_columns(self::get_columns());
 
         $table_builder
-            ->row_actions(fn($model) => ProductActions::get_row_actions_by_permission($permission, $model, $params))
-            ->row_click_action(fn($model) => ProductActions::get_row_click_action_by_permission($permission, $model, $params));
+            ->row_actions(fn($model) => OrderProductActions::get_row_actions_by_permission($permission, $model, $params))
+            ->row_click_action(fn($model) => OrderProductActions::get_row_click_action_by_permission($permission, $model, $params));
 
         return $table_builder;
     }

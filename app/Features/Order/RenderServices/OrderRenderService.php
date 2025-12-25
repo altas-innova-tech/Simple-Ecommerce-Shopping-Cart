@@ -31,6 +31,13 @@ class OrderRenderService extends BaseRenderService implements RenderServiceInter
                     ->name("product_count_render")
                     ->label("Products")
                     ->component(ComponentConstants::component_badge)
+            )
+            ->add_column(
+                ColumnItem
+                    ::new()
+                    ->name("total_render")
+                    ->label("Total")
+                    ->component(ComponentConstants::component_number)
             );
 
         return $columns_builder;

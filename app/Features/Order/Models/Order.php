@@ -8,12 +8,14 @@ use App\Core\Constants\Constants;
 use App\Core\Constants\FeaturesConstants;
 use App\Features\Order\Observers\OrderObserver;
 use App\Features\Order\RenderServices\OrderConstantsTrait;
+use App\Features\OrderProduct\Models\OrderProduct;
 use App\Models\User;
 use Database\Factories\OrderFactory;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 #[ObservedBy(OrderObserver::class)]
 class Order extends BaseModel {
@@ -34,6 +36,12 @@ class Order extends BaseModel {
     //==================================================================================================================
     public function user() : BelongsTo {
         return $this->belongsTo(User::class, "user_id");
+    }
+
+
+
+    public function products() : HasMany {
+        return $this->hasMany(OrderProduct::class, "order_id");
     }
 
     //==================================================================================================================
@@ -57,6 +65,7 @@ class Order extends BaseModel {
     }
 
 
+
     public function getProductCountRenderAttribute() : array {
         return [
             Constants::label => 1,
@@ -66,10 +75,23 @@ class Order extends BaseModel {
 
 
 
+    public function getTotalRenderAttribute() : int {
+        return $this->get_total();
+    }
+
+
+
     //==================================================================================================================
     // Methods
     //==================================================================================================================
     public function label() {
         return "";
+    }
+
+
+
+    public function get_total() : int {
+        return $this->products()
+                    ->sum("price");
     }
 }

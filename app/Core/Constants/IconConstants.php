@@ -41,7 +41,7 @@ class IconConstants {
     //==================================================================================================================
     // Features
     //==================================================================================================================
-    const string       feature_product = self::apple;
-    const string       feature_order = self::apple;
-    const string       cart            = self::ShoppingBasket;
+    const string       feature_product       = self::tags;
+    const string       feature_order         = self::ShoppingBasket;
+    const string       feature_order_product = self::apple;
 }

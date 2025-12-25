@@ -4,6 +4,6 @@
 namespace App\Features\Product\Services;
 
 
-class PermissionService {
+class ProductService {
 
 }

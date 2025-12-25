@@ -21,5 +21,8 @@ class DatabaseSeeder extends Seeder {
 
         $this->command->info("Seeding Orders...");
         $this->call(OrderSeeder::class);
+
+        $this->command->info("Seeding Orders Products...");
+        $this->call(OrderProductSeeder::class);
     }
 }

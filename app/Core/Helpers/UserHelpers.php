@@ -28,4 +28,8 @@ function is_member() : bool {
     return !user()->is_admin;
 }
 
+function is_admin() : bool {
+    return user()->is_admin;
+}
+
 
