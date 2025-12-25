@@ -62,7 +62,7 @@ class OrderRenderService extends BaseRenderService implements RenderServiceInter
                 ColumnItem
                     ::new()
                     ->name("status")
-                    ->label("status_render")
+                    ->label("Status")
                     ->component(ComponentConstants::component_badge)
             );
 
