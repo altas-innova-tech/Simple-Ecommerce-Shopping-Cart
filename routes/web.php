@@ -14,4 +14,12 @@ Route::get('dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+
+Route::middleware(['auth', 'verified'])
+     ->group(function () {
+         include __DIR__ . '/Features/ProductRoutes.php';
+      // include __DIR__ . '/Features/CartRoutes.php.php';
+     });
+
+
 require __DIR__.'/settings.php';

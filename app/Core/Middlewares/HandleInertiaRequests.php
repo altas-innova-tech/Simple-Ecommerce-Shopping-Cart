@@ -2,12 +2,12 @@
 
 namespace App\Core\Middlewares;
 
+use App\Sidebar\SidebarService;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
-class HandleInertiaRequests extends Middleware
-{
+class HandleInertiaRequests extends Middleware {
     /**
      * The root template that's loaded on the first page visit.
      *
@@ -17,15 +17,18 @@ class HandleInertiaRequests extends Middleware
      */
     protected $rootView = 'app';
 
+
+
     /**
      * Determines the current asset version.
      *
      * @see https://inertiajs.com/asset-versioning
      */
-    public function version(Request $request): ?string
-    {
+    public function version(Request $request) : ?string {
         return parent::version($request);
     }
+
+
 
     /**
      * Define the props that are shared by default.
@@ -34,18 +37,28 @@ class HandleInertiaRequests extends Middleware
      *
      * @return array<string, mixed>
      */
-    public function share(Request $request): array
-    {
-        [$message, $author] = str(Inspiring::quotes()->random())->explode('-');
+    public function share(Request $request) : array {
+        $sidebar_content = SidebarService::get_sidebar_content();
+
+        [$message, $author] = str(Inspiring::quotes()
+                                           ->random())->explode('-');
 
         return [
             ...parent::share($request),
-            'name' => config('app.name'),
-            'quote' => ['message' => trim($message), 'author' => trim($author)],
-            'auth' => [
+            'name'            => config('app.name'),
+            'quote'           => ['message' => trim($message), 'author' => trim($author)],
+            'auth'            => [
                 'user' => $request->user(),
             ],
-            'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
+            'sidebarOpen'     => !$request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
+            'toasts'          => $request->session()
+                                         ->pull('toasts', []),
+            "current_user"    => [
+                "name"  => user_name(),
+                "email" => user_email(),
+            ],
+            "sidebar_content" => $sidebar_content,
+
         ];
     }
 }

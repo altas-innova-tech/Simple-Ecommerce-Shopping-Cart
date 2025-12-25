@@ -1,0 +1,17 @@
+export default {
+    list: "list",
+    trashed: "trashed",
+    view: "view",
+    edit: "edit",
+    create: "create",
+    update: "update",
+    store: "store",
+    destroy: "destroy",
+    force_destroy: "force_destroy",
+    destroy_multi: "destroy_multi",
+    force_destroy_multi: "force_destroy_multi",
+    restore: "restore",
+    restore_multi: "restore_multi",
+    export: "export",
+    export_multi: "export_multi",
+}
