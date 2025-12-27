@@ -1,45 +1,41 @@
 <template>
-    <div class="w-full flex justify-start items-center h-full">
+    <div class="flex h-full w-full items-start justify-start">
         <form
             ref="form"
-            class="flex flex-col gap-3 bg-white w-1/2 h-full rounded-lg border border-base py-2 px-3"
+            class="border-base flex w-1/2 flex-col gap-3 rounded-lg border dark:bg-neutral-900 px-3 py-2"
             @submit.prevent="handle_submit"
         >
-            <slot name="default"/>
+            <slot name="default" />
 
-            <div class="flex justify-start mt-5">
-                <RenderActions
-                    :actions="actions"
-                ></RenderActions>
+            <div class="mt-5 flex justify-start">
+                <RenderActions :actions="actions"></RenderActions>
             </div>
 
-            <input name="key" :value="model?.key" type="hidden"/>
+            <input name="key" :value="model?.key" type="hidden" />
         </form>
     </div>
 </template>
 
 <script setup lang="ts">
-import {ActionsInterface} from "../data-table";
-import RenderActions from "../render-actions/render-actions.vue";
-import {provide, ref} from "vue";
+import { ActionsInterface } from '../data-table';
+import RenderActions from '../render-actions/render-actions.vue';
+import { provide, ref } from 'vue';
 
 interface FormInterface {
     actions: ActionsInterface[];
     model: any;
 }
 
-const props = defineProps<FormInterface>()
+const props = defineProps<FormInterface>();
 
-const form = ref<HTMLFormElement | null>(null)
+const form = ref<HTMLFormElement | null>(null);
 
 const handle_submit = (event: Event) => {
     event.preventDefault();
     // Your custom logic here
-}
+};
 
-provide("formulaire", form);
+provide('formulaire', form);
 </script>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

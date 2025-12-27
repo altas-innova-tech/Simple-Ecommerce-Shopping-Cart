@@ -1,10 +1,14 @@
 <template>
     <div :class="`flex flex-${direction} justify-start gap-1`">
-        <template
-            v-for="action in actions"
-        >
+        <template v-for="action in actions">
+            <ButtonAddToCart
+                v-if="action.button_add_to_cart"
+                v-bind="action"
+            ></ButtonAddToCart>
+
+
             <ButtonConfirme
-                v-if="action.button_confirme"
+                v-else-if="action.button_confirme"
                 v-bind="action"
             ></ButtonConfirme>
 
@@ -26,11 +30,12 @@
 //=========================================================================================================
 // Fonction pour charger le composant en fonction du render
 //=========================================================================================================
-import {ActionsInterface} from "../data-table";
-import {router} from "@inertiajs/vue3";
-import CustomButton from "../render-buttons/buttons/custom-button.vue";
-import ButtonConfirme from "../modals/button-confirme.vue";
-import {inject, Ref, ref} from "vue"
+import { ActionsInterface } from '../data-table';
+import { router } from '@inertiajs/vue3';
+import CustomButton from '../render-buttons/buttons/custom-button.vue';
+import ButtonConfirme from '../modals/button-confirme.vue';
+import { inject, Ref, ref } from 'vue';
+import ButtonAddToCart from '@/custom-components/modals/button-add-to-cart.vue';
 
 interface RenderActionsInterface {
     actions: ActionsInterface[];
@@ -40,9 +45,9 @@ interface RenderActionsInterface {
 
 const props = withDefaults(defineProps<RenderActionsInterface>(), {
     direction: 'row',
-    formulaire: () => inject<Ref<HTMLFormElement | null>>('formulaire', ref(null)),
-})
-
+    formulaire: () =>
+        inject<Ref<HTMLFormElement | null>>('formulaire', ref(null)),
+});
 
 const handle_clicked = (action: ActionsInterface) => {
     let values = null;
@@ -52,15 +57,18 @@ const handle_clicked = (action: ActionsInterface) => {
         values = Object.fromEntries(form_entries);
     }
 
-    console.log(action.method, action.method === "POST" && action.permission === 'store');
+    console.log(
+        action.method,
+        action.method === 'POST' && action.permission === 'store',
+    );
     switch (action.method) {
-        case "GET":
+        case 'GET':
             router.visit(action.url, {
                 method: action.method?.toString()?.toLowerCase(),
                 preserveState: true,
             });
             break;
-        case "POST":
+        case 'POST':
             if (action.permission !== 'store') {
                 router.visit(action.url, {
                     method: action.method?.toString()?.toLowerCase(),
@@ -74,7 +82,7 @@ const handle_clicked = (action: ActionsInterface) => {
                 });
             }
             break;
-        case "PUT":
+        case 'PUT':
             if (action.permission === 'update') {
                 router.visit(action.url, {
                     method: action.method?.toString()?.toLowerCase(),
@@ -86,9 +94,7 @@ const handle_clicked = (action: ActionsInterface) => {
         default:
             console.error(`Unknown Method : ${action.method} (handle_clicked)`);
     }
-}
+};
 </script>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>
