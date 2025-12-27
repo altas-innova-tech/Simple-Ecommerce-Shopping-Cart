@@ -41,6 +41,13 @@ class SidebarService {
                 ->add_item(
                     NavigationItem
                         ::new()
+                        ->label("Dashboard")
+                        ->icon(IconConstants::feature_dashboard)
+                        ->url("/dashboard")
+                )
+                ->add_item(
+                    NavigationItem
+                        ::new()
                         ->label("Products")
                         ->icon(Product::get_feature_icon())
                         ->url(FeaturesService::get_route(FeaturesConstants::product, PermissionConstants::permission_list))
@@ -85,6 +92,13 @@ class SidebarService {
             NavigationItem
                 ::new()
                 ->label("Features")
+                ->add_item(
+                    NavigationItem
+                        ::new()
+                        ->label("Dashboard")
+                        ->icon(IconConstants::feature_dashboard)
+                        ->url("/dashboard")
+                )
                 ->add_item(
                     NavigationItem
                         ::new()
