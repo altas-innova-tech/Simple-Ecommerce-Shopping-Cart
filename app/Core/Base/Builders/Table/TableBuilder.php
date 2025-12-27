@@ -18,6 +18,7 @@ class TableBuilder {
     protected Closure      $row_actions;
     protected Closure      $row_click_action;
 
+    protected string      $session_prefix;
     protected int         $page;
     protected int         $per_page;
     protected string|null $search_text;
@@ -35,19 +36,21 @@ class TableBuilder {
     private function __construct(Builder $query = null) {
         $this->query = $query;
 
-
-        $this->page            = request()->input("page", Session::get("data-table.page", self::default_page));
-        $this->per_page        = request()->input("per_page", Session::get("data-table.per_page", self::default_per_page));
-        $this->search_text     = request()->input("search_text", Session::get("data-table.search_text", null));
-        $this->order_by        = request()->input("order_by", Session::get("data-table.order_by", self::default_order_by));
-        $this->order_direction = request()->input("order_direction", Session::get("data-table.order_direction", self::default_order_direction));
+        $this->session_prefix = 'data-table.' . Str::slug(request()->path());
 
 
-        Session::put("data-table.page", $this->page);
-        Session::put("data-table.per_page", $this->per_page);
-        Session::put("data-table.search_text", $this->search_text);
-        Session::put("data-table.order_by", $this->order_by);
-        Session::put("data-table.order_direction", $this->order_direction);
+        $this->page            = request()->input("page", Session::get("{$this->session_prefix}.page", self::default_page));
+        $this->per_page        = request()->input("per_page", Session::get("{$this->session_prefix}.per_page", self::default_per_page));
+        $this->search_text     = request()->input("search_text", Session::get("{$this->session_prefix}.search_text", null));
+        $this->order_by        = request()->input("order_by", Session::get("{$this->session_prefix}.order_by", self::default_order_by));
+        $this->order_direction = request()->input("order_direction", Session::get("{$this->session_prefix}.order_direction", self::default_order_direction));
+
+
+        Session::put("{$this->session_prefix}.page", $this->page);
+        Session::put("{$this->session_prefix}.per_page", $this->per_page);
+        Session::put("{$this->session_prefix}.search_text", $this->search_text);
+        Session::put("{$this->session_prefix}.order_by", $this->order_by);
+        Session::put("{$this->session_prefix}.order_direction", $this->order_direction);
 
 
         // Apply order
@@ -215,4 +218,3 @@ class TableBuilder {
         return $row->toArray();
     }
 }
-
