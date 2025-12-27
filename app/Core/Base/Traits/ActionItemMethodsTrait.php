@@ -76,7 +76,7 @@ trait ActionItemMethodsTrait {
             ::new()
             ->label("Destroy")
             ->color(ColorConstants::red)
-            ->type(Constants::button_type_ghost)
+            ->type(Constants::button_type_destructive)
             ->button_confirme()
             ->button_confirme_destroy_label($model->label())
             ->button_confirme_destroy_description()

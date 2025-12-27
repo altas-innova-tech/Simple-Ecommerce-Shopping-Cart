@@ -19,10 +19,12 @@ class ActionItem {
         $this->url                         = null;
         $this->type                        = Constants::button_type_default;
         $this->button_confirme             = false;
+        $this->button_add_to_cart          = false;
         $this->button_confirme_label       = null;
         $this->button_confirme_description = null;
         $this->button_type                 = Constants::button_type_button;
         $this->permission                  = null;
+        $this->model                       = null;
     }
 
 
@@ -36,6 +38,8 @@ class ActionItem {
             "method"                      => $this->method,
             "type"                        => $this->type,
             "button_confirme"             => $this->button_confirme,
+            "button_add_to_cart"          => $this->button_add_to_cart,
+            "model"                       => $this->model,
             "button_confirme_label"       => $this->button_confirme_label,
             "button_confirme_description" => $this->button_confirme_description,
             "permission"                  => $this->permission,

@@ -2,6 +2,8 @@
 
 namespace App\Core\Traits\Builders;
 
+use App\Core\Base\Model\BaseModel;
+
 trait BuildersMethodsTrait {
 
     public static function new() : static {
@@ -28,6 +30,14 @@ trait BuildersMethodsTrait {
 
     public function value(string|int|array|null $value) : static {
         $this->value = $value;
+
+        return $this;
+    }
+
+
+
+    public function badge(string|int|array|null $value) : static {
+        $this->badge = $value;
 
         return $this;
     }
@@ -66,6 +76,22 @@ trait BuildersMethodsTrait {
 
 
 
+    public function model(BaseModel $model) : static {
+        $this->model = $model;
+
+        return $this;
+    }
+
+
+
+    public function button_add_to_cart() : static {
+        $this->button_add_to_cart = true;
+
+        return $this;
+    }
+
+
+
     public function button_confirme_label(string $label) : static {
         $this->button_confirme_label = $label;
 
@@ -74,7 +100,13 @@ trait BuildersMethodsTrait {
 
 
 
-    public function button_confirme_destroy_label(string $model_label) : static {
+    public function button_confirme_destroy_label(string $model_label, string $custom_label = "") : static {
+        if ($custom_label) {
+            $this->button_confirme_label = $custom_label;
+
+            return $this;
+        }
+
         $this->button_confirme_label = "Do you want to destroy <i style='font-weight: 700;'>$model_label</i> ?";
 
         return $this;
@@ -99,7 +131,7 @@ trait BuildersMethodsTrait {
 
 
     public function button_confirme_destroy_description() : static {
-        $this->button_confirme_description = "<i class='text-red-500 text-lg'>This Action can be undone. It will temporarily remove your data from our database.</i>";
+        $this->button_confirme_description = "<i class='text-red-500 text-lg'>This Action can be undone.  It will permanently remove your data from our database</i>";
 
         return $this;
     }

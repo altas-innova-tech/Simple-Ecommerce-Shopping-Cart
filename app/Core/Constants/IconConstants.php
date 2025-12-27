@@ -37,11 +37,12 @@ class IconConstants {
     const string              graduation_cap  = "GraduationCap";
     const  string             apple           = "Apple";
     const string              ShoppingBasket  = "ShoppingBasket";
+    const string              FlipHorizontal2  = "FlipHorizontal2";
 
     //==================================================================================================================
     // Features
     //==================================================================================================================
     const string       feature_product       = self::tags;
-    const string       feature_order         = self::ShoppingBasket;
-    const string       feature_order_product = self::apple;
+    const string       feature_order         = self::list_check;
+    const string       feature_order_product = self::ShoppingBasket;
 }

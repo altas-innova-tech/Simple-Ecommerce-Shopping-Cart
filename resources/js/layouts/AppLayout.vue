@@ -84,48 +84,84 @@
                     v-for="sidebar_group in sidebar"
                     :key="sidebar_group.label"
                 >
-                    <SidebarGroupLabel>{{
-                        sidebar_group.label
-                    }}</SidebarGroupLabel>
+                    <SidebarGroupLabel>{{ sidebar_group.label}}</SidebarGroupLabel>
                     <SidebarMenu>
-                        <Collapsible
-                            v-for="item in sidebar_group?.items"
-                            as-child
-                            :default-open="true"
-                            class="group/collapsible"
-                        >
-                            <SidebarMenuItem>
-                                <CollapsibleTrigger as-child>
-                                    <SidebarMenuButton :tooltip="item.label">
-                                        <Icon
-                                            @click="router.visit(item.url)"
-                                            vif="item?.icon"
-                                            :name="item.icon"
-                                        />
-                                        <span>{{ item.label }}</span>
-                                        <ChevronRight
-                                            class="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90"
-                                        />
-                                    </SidebarMenuButton>
-                                </CollapsibleTrigger>
-                                <CollapsibleContent>
-                                    <SidebarMenuSub>
-                                        <SidebarMenuSubItem
-                                            v-for="subItem in item.items"
-                                            :key="subItem.label"
+                        <template v-for="item in sidebar_group?.items">
+                            <Collapsible
+                                v-if="item?.items?.length"
+                                as-child
+                                class="group/collapsible"
+                            >
+                                <SidebarMenuItem>
+                                    <CollapsibleTrigger
+                                        as-child
+                                        :class="{
+                                            'cursor-pointer':
+                                                !item?.items?.length,
+                                        }"
+                                    >
+                                        <SidebarMenuButton
+                                            :tooltip="item.label"
                                         >
-                                            <SidebarMenuSubButton as-child>
-                                                <NavLink :href="subItem.url">
-                                                    <span>{{
-                                                        subItem.label
-                                                    }}</span>
-                                                </NavLink>
-                                            </SidebarMenuSubButton>
-                                        </SidebarMenuSubItem>
-                                    </SidebarMenuSub>
-                                </CollapsibleContent>
+                                            <Icon
+                                                v-if="item?.icon"
+                                                :name="item.icon"
+                                            />
+                                            <span>{{ item.label }}</span>
+
+                                            <Badge
+                                                v-if="item?.badge"
+                                                class="ml-auto"
+                                            >
+                                                {{ item?.badge }}
+                                            </Badge>
+
+                                            <ChevronRight
+                                                v-if="item?.items?.length"
+                                                class="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90"
+                                            />
+                                        </SidebarMenuButton>
+                                    </CollapsibleTrigger>
+
+                                    <CollapsibleContent v-if="item?.items">
+                                        <SidebarMenuSub>
+                                            <SidebarMenuSubItem
+                                                v-for="subItem in item.items"
+                                                :key="subItem.label"
+                                            >
+                                                <SidebarMenuSubButton
+                                                    as-child
+                                                >
+                                                    <NavLink
+                                                        :href="subItem.url"
+                                                    >
+                                                        <span>{{
+                                                            subItem.label
+                                                        }}</span>
+                                                    </NavLink>
+                                                </SidebarMenuSubButton>
+                                            </SidebarMenuSubItem>
+                                        </SidebarMenuSub>
+                                    </CollapsibleContent>
+                                </SidebarMenuItem>
+                            </Collapsible>
+                            <SidebarMenuItem v-else>
+                                <SidebarMenuButton
+                                    :tooltip="item.label"
+                                    @click="router.visit(item.url)"
+                                >
+                                    <Icon v-if="item?.icon" :name="item.icon" />
+                                    <span>{{ item.label }}</span>
+
+                                    <Badge
+                                        v-if="item?.badge"
+                                        class="ml-auto"
+                                    >
+                                        {{ item?.badge }}
+                                    </Badge>
+                                </SidebarMenuButton>
                             </SidebarMenuItem>
-                        </Collapsible>
+                        </template>
                     </SidebarMenu>
                 </SidebarGroup>
             </SidebarContent>
@@ -216,7 +252,9 @@
                                     </DropdownMenuItem>
                                 </DropdownMenuGroup>
                                 <DropdownMenuSeparator />
-                                <DropdownMenuItem>
+                                <DropdownMenuItem
+                                    @click="() => router.visit(logout())"
+                                >
                                     <LogOut />
                                     Log out
                                 </DropdownMenuItem>
@@ -228,7 +266,7 @@
             <SidebarRail />
         </Sidebar>
         <SidebarInset
-            class="transition-[margin-left] md:ml-[--sidebar-width] ease-linear ml-[200px]"
+            class="transition-[margin-left] ease-linear md:peer-data-[state=expanded]:ml-[var(--sidebar-width)] md:peer-data-[state=collapsed]:ml-[var(--sidebar-width-icon)]"
         >
             <header
                 class="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12"
@@ -310,7 +348,9 @@
             <!----------------------------------------------->
             <!-- Content -->
             <!----------------------------------------------->
-            <div class="flex flex-1 flex-col mlk^poiuh,;:=ùmù`$-)eml-20 gap-4 p-4 pt-0">
+            <div
+                class="mlk^poiuh,;:=ùmù`$-)eml-20 flex flex-1 flex-col gap-4 p-4 pt-0"
+            >
                 <slot></slot>
 
                 <!--                <div class="grid auto-rows-min gap-4 md:grid-cols-3">-->
@@ -336,6 +376,7 @@ import {
     BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
 
+import { Badge } from '@/components/ui/badge';
 import {
     Collapsible,
     CollapsibleContent,
@@ -370,6 +411,12 @@ import {
     SidebarRail,
     SidebarTrigger,
 } from '@/components/ui/sidebar';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import Icon from '@/custom-components/icon.vue';
+import NavLink from '@/custom-components/nav-link.vue';
+import Notifications from '@/custom-components/notifications/notifications.vue';
+import { logout } from '@/routes';
+import { router, usePage } from '@inertiajs/vue3';
 import {
     AudioWaveform,
     BadgeCheck,
@@ -390,13 +437,8 @@ import {
     Sparkles,
     SquareTerminal,
 } from 'lucide-vue-next';
-import { computed, defineAsyncComponent, ref } from 'vue';
-import { router, usePage } from '@inertiajs/vue3';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { computed, ref } from 'vue';
 import { route } from 'ziggy-js';
-import Icon from '@/custom-components/icon.vue';
-import Notifications from '@/custom-components/notifications/notifications.vue';
-import NavLink from '@/custom-components/nav-link.vue';
 
 const sidebar = computed(() => usePage().props?.sidebar_content);
 const current_user = computed<{
