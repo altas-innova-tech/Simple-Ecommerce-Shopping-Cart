@@ -24,9 +24,11 @@ createInertiaApp({
             import.meta.glob<DefineComponent>('./pages/**/*.vue'),
         );
 
-        const pages_without_layout = [];
-
-        page.default.layout = page.default?.layout || AppLayout;
+        const pages_without_layout = ['auth/Login'];
+        console.log(name);
+        if (!pages_without_layout.includes(name)) {
+            page.default.layout = page.default.layout || AppLayout;
+        }
 
         return page;
     },
