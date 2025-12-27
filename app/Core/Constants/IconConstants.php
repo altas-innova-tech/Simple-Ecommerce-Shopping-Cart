@@ -38,6 +38,8 @@ class IconConstants {
     const  string             apple           = "Apple";
     const string              ShoppingBasket  = "ShoppingBasket";
     const string              FlipHorizontal2  = "FlipHorizontal2";
+    const string              LayoutDashboard  = "LayoutDashboard";
+
 
     //==================================================================================================================
     // Features
@@ -45,4 +47,5 @@ class IconConstants {
     const string       feature_product       = self::tags;
     const string       feature_order         = self::list_check;
     const string       feature_order_product = self::ShoppingBasket;
+    const string       feature_dashboard = self::LayoutDashboard;
 }
