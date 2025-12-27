@@ -59,6 +59,10 @@ class User extends BaseModel {
         $query->where('is_admin', "=", "0");
     }
 
+    protected function scopeAdmin(Builder $query) : void {
+        $query->where('is_admin', "=", "1");
+    }
+
 
 
     protected function scopeListForSelect(Builder $query, string $value = "id", string $label = "name") : Builder {

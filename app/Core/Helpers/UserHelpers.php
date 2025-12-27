@@ -1,5 +1,6 @@
 <?php
 
+use App\Features\Order\Models\Order;
 use Illuminate\Contracts\Auth\Authenticatable;
 
 function user() : ?Authenticatable {
@@ -24,12 +25,20 @@ function user_name() : ?string {
 }
 
 
-function is_member() : bool {
-    return !user()->is_admin;
+function is_member() : ?bool {
+    return !user()?->is_admin;
 }
 
-function is_admin() : bool {
-    return user()->is_admin;
+function is_admin() : ?bool {
+    return user()?->is_admin;
+}
+
+
+function is_member_has_order_cart_with_products() : bool {
+    return (bool)
+    Order::get_member_order_cart()
+         ?->products()
+         ->count();
 }
 
 

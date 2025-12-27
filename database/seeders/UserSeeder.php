@@ -6,13 +6,11 @@ use App\Features\Product\Models\Product;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
-class UserSeeder extends Seeder
-{
+class UserSeeder extends Seeder {
     /**
      * Run the database seeds.
      */
-    public function run(): void
-    {
+    public function run() : void {
         User::factory()
             ->create([
                          'name'     => 'Admin User',
@@ -20,18 +18,23 @@ class UserSeeder extends Seeder
                          "is_admin" => true,
                      ]);
 
+        User::factory()
+            ->create([
+                         'name'  => 'Member User 1',
+                         'email' => 'member1@gmail.com',
+                     ]);
 
         User::factory()
             ->create([
-                         'name'  => 'Member User',
-                         'email' => 'member@gmail.com',
+                         'name'  => 'Member User 2',
+                         'email' => 'member2@gmail.com',
                      ]);
 
 
         User::factory()
             ->create([
-                         'name'  => 'Member User1',
-                         'email' => 'member-1@gmail.com',
+                         'name'  => 'Member User 3',
+                         'email' => 'member3@gmail.com',
                      ]);
     }
 }
