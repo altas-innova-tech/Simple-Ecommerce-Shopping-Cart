@@ -364,3 +364,140 @@ dashboardForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> =
 })
 
 dashboard.form = dashboardForm
+
+/**
+* @see \App\Features\OrderProduct\Controllers\OrderProductController::cart
+* @see app/Features/OrderProduct/Controllers/OrderProductController.php:105
+* @route '/cart'
+*/
+export const cart = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: cart.url(options),
+    method: 'get',
+})
+
+cart.definition = {
+    methods: ["get","head"],
+    url: '/cart',
+} satisfies RouteDefinition<["get","head"]>
+
+/**
+* @see \App\Features\OrderProduct\Controllers\OrderProductController::cart
+* @see app/Features/OrderProduct/Controllers/OrderProductController.php:105
+* @route '/cart'
+*/
+cart.url = (options?: RouteQueryOptions) => {
+    return cart.definition.url + queryParams(options)
+}
+
+/**
+* @see \App\Features\OrderProduct\Controllers\OrderProductController::cart
+* @see app/Features/OrderProduct/Controllers/OrderProductController.php:105
+* @route '/cart'
+*/
+cart.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: cart.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Features\OrderProduct\Controllers\OrderProductController::cart
+* @see app/Features/OrderProduct/Controllers/OrderProductController.php:105
+* @route '/cart'
+*/
+cart.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
+    url: cart.url(options),
+    method: 'head',
+})
+
+/**
+* @see \App\Features\OrderProduct\Controllers\OrderProductController::cart
+* @see app/Features/OrderProduct/Controllers/OrderProductController.php:105
+* @route '/cart'
+*/
+const cartForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: cart.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Features\OrderProduct\Controllers\OrderProductController::cart
+* @see app/Features/OrderProduct/Controllers/OrderProductController.php:105
+* @route '/cart'
+*/
+cartForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: cart.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Features\OrderProduct\Controllers\OrderProductController::cart
+* @see app/Features/OrderProduct/Controllers/OrderProductController.php:105
+* @route '/cart'
+*/
+cartForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: cart.url({
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+cart.form = cartForm
+
+/**
+* @see \App\Features\OrderProduct\Controllers\OrderProductController::checkout
+* @see app/Features/OrderProduct/Controllers/OrderProductController.php:111
+* @route '/checkout'
+*/
+export const checkout = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+    url: checkout.url(options),
+    method: 'post',
+})
+
+checkout.definition = {
+    methods: ["post"],
+    url: '/checkout',
+} satisfies RouteDefinition<["post"]>
+
+/**
+* @see \App\Features\OrderProduct\Controllers\OrderProductController::checkout
+* @see app/Features/OrderProduct/Controllers/OrderProductController.php:111
+* @route '/checkout'
+*/
+checkout.url = (options?: RouteQueryOptions) => {
+    return checkout.definition.url + queryParams(options)
+}
+
+/**
+* @see \App\Features\OrderProduct\Controllers\OrderProductController::checkout
+* @see app/Features/OrderProduct/Controllers/OrderProductController.php:111
+* @route '/checkout'
+*/
+checkout.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+    url: checkout.url(options),
+    method: 'post',
+})
+
+/**
+* @see \App\Features\OrderProduct\Controllers\OrderProductController::checkout
+* @see app/Features/OrderProduct/Controllers/OrderProductController.php:111
+* @route '/checkout'
+*/
+const checkoutForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: checkout.url(options),
+    method: 'post',
+})
+
+/**
+* @see \App\Features\OrderProduct\Controllers\OrderProductController::checkout
+* @see app/Features/OrderProduct/Controllers/OrderProductController.php:111
+* @route '/checkout'
+*/
+checkoutForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: checkout.url(options),
+    method: 'post',
+})
+
+checkout.form = checkoutForm
