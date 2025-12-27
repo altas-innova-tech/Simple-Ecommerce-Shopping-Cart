@@ -81,4 +81,15 @@ class ProductRenderService extends BaseRenderService implements RenderServiceInt
 
         return $table_builder;
     }
+
+
+
+    public static function get_render_params_list(array $render_params, string $permission) : array {
+        $render_params = parent::get_render_params_list($render_params, $permission);
+
+        $render_params['display_checkbox'] = is_admin();
+
+
+        return $render_params;
+    }
 }
