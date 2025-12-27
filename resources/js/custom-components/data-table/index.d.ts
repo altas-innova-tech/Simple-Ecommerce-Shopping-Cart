@@ -1,8 +1,15 @@
-import {ButtonsInterface} from "../render-buttons";
-import {CommonFieldsPropertiesInterface} from "../fields";
+import { CommonFieldsPropertiesInterface } from '../fields';
+import { ButtonsInterface } from '../render-buttons';
 
 export interface ActionsInterface extends ButtonsInterface {
-    type: "primary" | "secondary" | "destructive" | "outline" | "ghost" | "link" | "icon";
+    type:
+        | 'primary'
+        | 'secondary'
+        | 'destructive'
+        | 'outline'
+        | 'ghost'
+        | 'link'
+        | 'icon';
     permission?: string;
 }
 
@@ -54,7 +61,8 @@ export interface DataTableInterface<ItemInterface = any> {
 export interface FeaturesListInterface<ItemInterface = any> {
     actions: ActionsInterface[];
     actions_multi: ActionsInterface[];
-    table_builder: DataTableInterface<ItemInterface>
+    table_builder: DataTableInterface<ItemInterface>;
+    display_checkbox?: boolean;
 }
 
 export interface FeaturesViewInterface<ItemInterface = any> {
@@ -62,7 +70,6 @@ export interface FeaturesViewInterface<ItemInterface = any> {
     model: ItemInterface;
     permission: string;
 }
-
 
 export interface FilterOptionInterface {
     name: string;
@@ -77,6 +84,6 @@ export interface DataTableFiltersInterface {
 }
 
 export interface DataTableFilterInterface {
-    filter_option: FilterOptionInterface
-    model_value?: (string | number)[]
+    filter_option: FilterOptionInterface;
+    model_value?: (string | number)[];
 }

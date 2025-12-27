@@ -18,6 +18,9 @@
                 :placeholder="placeholder"
                 :type="type"
                 :model-value="value"
+                :min="min"
+                :max="max"
+                :step="step"
                 class="text-field"
                 @input="handle_changed"
             />
@@ -32,7 +35,11 @@ import { CommonFieldsPropertiesInterface } from '@/custom-components/fields/inde
 import { Input } from '@/components/ui/input';
 import Fields from "@/custom-components/fields/fields.vue";
 
-export interface TextFieldInterface extends CommonFieldsPropertiesInterface {}
+export interface TextFieldInterface extends CommonFieldsPropertiesInterface {
+    min?: number;
+    max?: number;
+    step?: number;
+}
 
 const props = withDefaults(defineProps<TextFieldInterface>(), {
     type: 'text',

@@ -51,7 +51,6 @@ const color_from_value = computed<string>(() => {
 
 const content = computed<string>(() => {
     if (props.value?.label) {
-        console.log(props.value?.label);
         return props.value?.label;
     }
 

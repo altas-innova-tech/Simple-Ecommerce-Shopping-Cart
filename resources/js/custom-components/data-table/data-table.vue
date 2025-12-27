@@ -35,6 +35,7 @@
             <TableRow>
                 <TableHead class="w-fit">
                     <Checkbox
+                        v-if="display_checkbox"
                         :checked="is_all_selected"
                         :indeterminate="is_indeterminate"
                         @update:checked="handle_select_all"
@@ -89,6 +90,7 @@
             <TableRow v-else v-for="(item, index) in items" :key="index">
                 <TableCell class="w-fit">
                     <Checkbox
+                        v-if="display_checkbox"
                         :checked="selected_items.includes(item.item.key)"
                         @update:checked="
                             (value) => handle_select_item(value, item.item)
@@ -106,7 +108,13 @@
 
                 <!-- DropdownMenu for Actions -->
                 <TableCell class="!w-[10px]">
-                    <DropdownMenu>
+                    <div v-if="item.row_actions?.length === 1">
+                        <RenderActions
+                            :actions="item.row_actions"
+                        ></RenderActions>
+                    </div>
+
+                    <DropdownMenu v-else-if="item.row_actions?.length">
                         <DropdownMenuTrigger
                             class="rounded-sm hover:bg-gray-300"
                         >
@@ -214,7 +222,9 @@ import {
 } from './index';
 import Paginator from './paginator.vue';
 
-const props = defineProps<FeaturesListInterface>();
+const props = withDefaults(defineProps<FeaturesListInterface>(), {
+    display_checkbox: true,
+});
 const headers = computed<PaginationHeadersInterface[]>(
     () => props.table_builder.headers,
 );
