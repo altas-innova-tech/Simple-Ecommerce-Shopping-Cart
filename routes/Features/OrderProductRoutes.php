@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Route;
 Route::name(FeaturesConstants::order_product . ".")
      ->prefix(Str::slug(FeaturesConstants::order_product))
      ->group(function () {
-         Route::get("/{order_key}", [OrderProductController::class, "list"])
+         Route::get("/", [OrderProductController::class, "list"])
               ->name("list");
 
 
@@ -40,3 +40,12 @@ Route::name(FeaturesConstants::order_product . ".")
                        ->name("destroy");
               });
      });
+
+
+Route::get("/cart", [OrderProductController::class, "cart"])
+     ->name("cart");
+
+
+
+Route::post("/checkout", [OrderProductController::class, "checkout"])
+     ->name("checkout");

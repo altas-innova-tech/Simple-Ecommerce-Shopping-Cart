@@ -23,7 +23,8 @@ class OrderProductFormRequest extends BaseFormRequest {
                 Rule::exists(FeaturesConstants::product, "id"),
             ],
             "order_id"   => [
-                "required",
+                "sometimes",
+                "nullable",
                 "integer",
                 Rule::exists(FeaturesConstants::order, "id"),
                 Rule::unique(FeaturesConstants::order, "id")

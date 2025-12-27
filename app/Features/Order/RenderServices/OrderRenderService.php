@@ -14,6 +14,7 @@ use App\Core\Interfaces\Features\RenderServiceInterface;
 use App\Features\Order\Models\Order;
 use App\Features\Order\Services\OrderService;
 use App\Models\User;
+use Illuminate\Support\Facades\Route;
 
 class OrderRenderService extends BaseRenderService implements RenderServiceInterface {
     use OrderConstantsTrait;
@@ -92,17 +93,48 @@ class OrderRenderService extends BaseRenderService implements RenderServiceInter
     public static function get_table_builder(array $params = []) : TableBuilder {
         $permission = $params[Constants::key_permission];
 
-        $query = Order::byUser();
+        $query = Order::query();
+
+        if (is_member()) {
+            $query = Order::get_member_completed_orders();
+        }
 
 
         $table_builder = TableBuilder::query($query)
-                                     ->add_filters(self::get_filter_builder())
                                      ->add_columns(self::get_columns());
+
+
+        if (is_admin()) {
+            $table_builder->add_filters(self::get_filter_builder());
+        }
 
         $table_builder
             ->row_actions(fn($model) => OrderActions::get_row_actions_by_permission($permission, $model, $params))
             ->row_click_action(fn($model) => OrderActions::get_row_click_action_by_permission($permission, $model, $params));
 
         return $table_builder;
+    }
+
+
+
+    public static function get_render_params_list(array $render_params, string $permission) : array {
+        $render_params = parent::get_render_params_list($render_params, $permission);
+
+
+        if (is_member()) {
+            $render_params[Constants::title_page] = "My orders";
+        }
+
+        return $render_params;
+    }
+
+
+
+    public static function get_commun_render_params(array $render_params) : array {
+        $render_params = parent::get_commun_render_params($render_params);
+
+        $render_params['status'] = OrderService::get_status_render();
+
+        return $render_params;
     }
 }

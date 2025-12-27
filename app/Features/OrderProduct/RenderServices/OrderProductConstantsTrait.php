@@ -16,7 +16,7 @@ use App\Features\Product\RenderServices\ProductTitlePageService;
 use Illuminate\Support\Str;
 
 trait OrderProductConstantsTrait {
-    const string feature = FeaturesConstants::product;
+    const string feature = FeaturesConstants::order_product;
 
 
 

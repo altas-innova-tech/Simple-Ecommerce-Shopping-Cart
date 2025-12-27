@@ -5,10 +5,13 @@ namespace App\Features\OrderProduct\RenderServices;
 use App\Core\Base\Builders\Table\ColumnBuilder;
 use App\Core\Base\Builders\Table\ColumnItem;
 use App\Core\Base\Builders\Table\TableBuilder;
+use App\Core\Base\Model\BaseModel;
 use App\Core\Base\RenderData\BaseRenderService;
 use App\Core\Constants\ComponentConstants;
 use App\Core\Constants\Constants;
+use App\Core\Constants\PermissionConstants;
 use App\Core\Interfaces\Features\RenderServiceInterface;
+use App\Features\Order\Models\Order;
 use App\Features\OrderProduct\Models\OrderProduct;
 
 class OrderProductRenderService extends BaseRenderService implements RenderServiceInterface {
@@ -21,11 +24,9 @@ class OrderProductRenderService extends BaseRenderService implements RenderServi
             ->add_column(
                 ColumnItem
                     ::new()
-                    ->name("name")
-                    ->label("Name")
+                    ->name("product_render")
+                    ->label("Product")
                     ->component(ComponentConstants::component_text)
-                    ->searchable()
-                    ->triable()
             )
             ->add_column(
                 ColumnItem
@@ -39,8 +40,8 @@ class OrderProductRenderService extends BaseRenderService implements RenderServi
             ->add_column(
                 ColumnItem
                     ::new()
-                    ->name("stock_quantity")
-                    ->label("Stock quantity")
+                    ->name("quantity")
+                    ->label("Quantity")
                     ->component(ComponentConstants::component_number)
                     ->searchable()
                     ->triable()
@@ -54,7 +55,14 @@ class OrderProductRenderService extends BaseRenderService implements RenderServi
     public static function get_table_builder(array $params = []) : TableBuilder {
         $permission = $params[Constants::key_permission];
 
-        $query = OrderProduct::query();
+        if (is_member()) {
+            $order = Order::get_member_order_cart();
+
+            $query = OrderProduct::orderId($order?->id);
+        } else {
+            $query = OrderProduct::query();
+        }
+
 
         $table_builder = TableBuilder::query($query)
                                      ->add_columns(self::get_columns());
@@ -64,5 +72,19 @@ class OrderProductRenderService extends BaseRenderService implements RenderServi
             ->row_click_action(fn($model) => OrderProductActions::get_row_click_action_by_permission($permission, $model, $params));
 
         return $table_builder;
+    }
+
+
+
+    public static function get_render_params_list(array $render_params, string $permission) : array {
+        $render_params = parent::get_render_params_list($render_params, $permission);
+
+        if (is_member()) {
+            $total = Order::get_member_total_cart();
+
+            $render_params[Constants::title_page] = "My cart - Total ($total)";
+        }
+
+        return $render_params;
     }
 }
