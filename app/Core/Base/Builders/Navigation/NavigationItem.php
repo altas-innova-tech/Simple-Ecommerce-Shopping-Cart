@@ -29,6 +29,7 @@ class NavigationItem {
             "label" => $this->label,
             "url"   => $this->url ?? "",
             "icon"  => $this->icon ?? null,
+            "badge"  => $this->badge ?? null,
             "items" => $this->items ?? null,
         ];
     }
